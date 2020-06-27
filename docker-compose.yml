@@ -1,0 +1,6 @@
+services:
+    image: initdc/kodbox
+    ports:
+      - 80:80
+    volumes:
+      - /Users/apple/data/files:/var/www/kodbox/data/files
