@@ -1,30 +1,26 @@
-FROM ubuntu:18.04
-RUN set -x \
-    && export DEBIAN_FRONTEND=noninteractive \
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    TZ=Asia/Shanghai
+
+ENV TAG=1.29.01
+
+RUN set -e \
     && apt-get update \
-    && apt-get install -y tzdata \
-    && ln -fs /usr/share/zoneinfo/US /etc/localtime \
-    && dpkg-reconfigure -f noninteractive tzdata \
-    && apt-get install -y nginx-full sqlite redis unzip\
-    && apt-get install -y php php-fpm php-curl php-gd php-mbstring php-redis php-sqlite3 \
-    && apt-get remove --purge -y --auto-remove \
+    && apt-get install --no-install-recommends -y nginx sqlite redis git ca-certificates \
+    && apt-get install --no-install-recommends -y \
+    php php-curl php-fpm php-gd php-json php-mbstring php-redis php-sqlite3 php-xml \
+    && apt-get autoremove --purge \
     && rm -rf /var/lib/apt/lists/*
 
-COPY kodbox.1.09.zip /var/www/kodbox.zip
 COPY kod.conf /etc/nginx/conf.d/
-COPY run.sh /
-RUN set -x \
+COPY run.sh /root/
+RUN set -e \
     && rm /etc/nginx/sites-enabled/default \
-    && chmod +x /run.sh \
-    && cd /var/www \
-    && unzip kodbox.zip -d kodbox \
-    && chmod -Rf 777 kodbox \
-    && rm kodbox.zip \
-    && apt-get remove --purge -y --auto-remove unzip zip apache2\
-    && rm -rf /var/lib/apt/lists/*
+    && chmod +x /root/run.sh \
+    && git clone -b ${TAG} https://github.com/kalcaddle/kodbox.git /var/www/kodbox \
+    && chmod -Rf 777 /var/www/kodbox
 
 EXPOSE 80
 
-STOPSIGNAL SIGTERM
-
-CMD ["./run.sh"]
+CMD ["/root/run.sh"]
