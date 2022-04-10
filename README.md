@@ -7,7 +7,7 @@ the kodbox runing on ```php + nginx + sqlite + redis```
 quick start
 
 ```
-docker run -p 80:80 initdc/kodbox
+docker run -dp 80:80 initdc/kodbox
 ```
 
 keep files with custom directory
