@@ -1,6 +1,6 @@
 # kodbox on docker
 
-the kodbox runing on ```php + nginx + sqlite + redis```
+the kodbox runing on `php + nginx + sqlite + redis`
 
 ## docker run
 
@@ -16,15 +16,16 @@ keep files with custom directory
 // cd to custom dir you want
 cd /root
 
-mkdir data data/files
+mkdir -p data data/files
 ```
 
 ```
-docker run -p 80:80 -v /root/data/files:/var/www/html/data/files initdc/kodbox
+docker run -p 80:80 -v /root/data/files:/var/www/kodbox/data/files initdc/kodbox
 ```
 
 ## docker-compose
-create a file named  ```docker-compose.yml```
+
+create a file named `docker-compose.yml`
 
 copy the following content to it
 
@@ -37,10 +38,10 @@ services:
       - /root/data/files:/var/www/kodbox/data/files
 ```
 
-then run with 
+then run with
 
 ```
-docker-compose up -d 
+docker-compose up -d
 ```
 
 ## Contributing
